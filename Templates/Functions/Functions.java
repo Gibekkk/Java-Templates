@@ -53,11 +53,14 @@ public class Functions extends SideFunctions {
         int gap = 0, bannerLength = tableTitle.length();
         if (bannerLength > totalDataLength) {
             gap = (bannerLength - totalDataLength);
+            if(gap >= columnNames.length)gap /= columnNames.length;
             for(int i = 0; i < dataLength.length; i++){
                 dataLength[i] += gap;
             }
             totalDataLength = summarize(dataLength, columnNames.length);
-        } else if (bannerLength == totalDataLength) {
+            if(totalDataLength < bannerLength)totalDataLength = bannerLength;
+        } 
+        if (bannerLength == totalDataLength) {
             gap = 1;
             for(int i = 0; i < dataLength.length; i++){
                 dataLength[i] += gap;
@@ -65,70 +68,19 @@ public class Functions extends SideFunctions {
             totalDataLength = summarize(dataLength, columnNames.length);
         }
         String titleBanner = "+";
-        for (int i = 0; i < totalDataLength - 1; i++) {
+        for (int i = 1; i < totalDataLength; i++) {
             titleBanner += "-";
         }
         titleBanner += "+";
+        String dataBanner = "+";
+        for (int i = 0; i < dataLength.length; i++) {
+            for(int j = 0; j < dataLength[i]; j++){
+                dataBanner += "-";
+            }
+            dataBanner += "+";
+        }
         generateTableTitle(tableTitle, totalDataLength, titleBanner);
-        generateTableHeader(columnNames, dataLength, gap, titleBanner, centerHeader);
-        generateTableData(rowData, dataLength, gap, titleBanner, centerRow);
-    }
-
-    public static void generateTableHeader(Object[] columnNames, int[] dataLength, int gap, String titleBanner, boolean centerHeader) {
-        System.out.printf("|");
-        for (int i = 0; i < columnNames.length; i++) {
-            String columnName = columnNames[i].toString();
-            if (centerHeader) {
-                System.out.printf((new StringAlignment(dataLength[i], StringAlignment.Alignment.CENTER).format(columnName)) + "|");
-            } else{
-                System.out.printf("%-" + dataLength[i] + "s|", columnName);
-            }
-        }
-        System.out.printf("%n" + titleBanner + "%n");
-    }
-
-    public static void generateTableData(Object[][] rowData, int[] dataLength, int gap, String titleBanner, boolean centerRow) {
-        for(int j = 0; j<rowData.length; j++){
-            System.out.printf("|");
-            for (int i = 0; i < rowData[j].length; i++) {
-                Object dataText = rowData[j][i];
-                if (centerRow) {
-                    System.out.printf((new StringAlignment(dataLength[i], StringAlignment.Alignment.CENTER).format(dataText)) + "|");
-                } else{
-                    System.out.printf("%-" + dataLength[i] + "s|", dataText);
-                }
-            }
-            System.out.printf("%n" + titleBanner + "%n");
-        }
-    }
-
-    public static void generateTableTitle(String tableTitle, int totalDataLength, String titleBanner) {
-        System.out.printf(titleBanner + "%n");
-        System.out.printf("|" + (new StringAlignment(totalDataLength-1, StringAlignment.Alignment.CENTER).format(tableTitle)) + "|\n");
-        System.out.printf(titleBanner + "%n");
-    }
-
-    public static int[] dataLengthGenerator(Object[][] rowData, Object[] columnNames) {
-        int[] dataLength = new int[columnNames.length];
-        for (int length = 0; length < columnNames.length; length++) {
-            if (columnNames[length] != null) {
-                int panjangHeader = columnNames[length].toString().length();
-                if (panjangHeader > dataLength[length]) {
-                    dataLength[length] = panjangHeader + 4;
-                }
-            }
-        }
-
-        for (int i = 0; i < rowData.length; i++) {
-            for (int l = 0; l < columnNames.length; l++) {
-                if (rowData[i][l] != null) {
-                    int panjangData = rowData[i][l].toString().length();
-                    if (panjangData > dataLength[l]) {
-                        dataLength[l] = panjangData + 4;
-                    }
-                }
-            }
-        }
-        return dataLength;
+        generateTableHeader(columnNames, dataLength, gap, dataBanner, centerHeader);
+        generateTableData(rowData, dataLength, gap, dataBanner, centerRow);
     }
 }
