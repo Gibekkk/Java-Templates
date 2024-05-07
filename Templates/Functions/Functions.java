@@ -57,13 +57,18 @@ public class Functions extends SideFunctions {
                 dataLength[i] += gap;
             }
             totalDataLength = summarize(dataLength, columnNames.length);
+        } else if (bannerLength == totalDataLength) {
+            gap = 1;
+            for(int i = 0; i < dataLength.length; i++){
+                dataLength[i] += gap;
+            }
+            totalDataLength = summarize(dataLength, columnNames.length);
         }
         String titleBanner = "+";
         for (int i = 0; i < totalDataLength - 1; i++) {
             titleBanner += "-";
         }
         titleBanner += "+";
-        println(dataLength[0]);
         generateTableTitle(tableTitle, totalDataLength, titleBanner);
         generateTableHeader(columnNames, dataLength, gap, titleBanner, centerHeader);
         generateTableData(rowData, dataLength, gap, titleBanner, centerRow);
@@ -72,15 +77,9 @@ public class Functions extends SideFunctions {
     public static void generateTableHeader(Object[] columnNames, int[] dataLength, int gap, String titleBanner, boolean centerHeader) {
         System.out.printf("|");
         for (int i = 0; i < columnNames.length; i++) {
-            Object columnName = columnNames[i];
+            String columnName = columnNames[i].toString();
             if (centerHeader) {
-                int bannerLength = columnNames[i].toString().length();
-                String dataPadding = "";
-                int range = ((dataLength[i] - 1) - bannerLength) / 2;
-                for (int j = 0; j < range; j++) {
-                    dataPadding += " ";
-                }
-                System.out.printf(((columnNames[i].toString().length() % 2 == 0) ? "" : " ") + dataPadding + columnName + " " + dataPadding + "|");
+                System.out.printf((new StringAlignment(dataLength[i], StringAlignment.Alignment.CENTER).format(columnName)) + "|");
             } else{
                 System.out.printf("%-" + dataLength[i] + "s|", columnName);
             }
@@ -92,17 +91,11 @@ public class Functions extends SideFunctions {
         for(int j = 0; j<rowData.length; j++){
             System.out.printf("|");
             for (int i = 0; i < rowData[j].length; i++) {
-                Object columnName = rowData[j][i];
+                Object dataText = rowData[j][i];
                 if (centerRow) {
-                    int bannerLength = rowData[j][i].toString().length();
-                    String dataPadding = "";
-                    int range = ((dataLength[i] - 1) - bannerLength) / 2;
-                    for (int k = 0; k < range; k++) {
-                        dataPadding += " ";
-                    }
-                    System.out.printf(" " + dataPadding + columnName + " " + dataPadding + "|");
+                    System.out.printf((new StringAlignment(dataLength[i], StringAlignment.Alignment.CENTER).format(dataText)) + "|");
                 } else{
-                    System.out.printf("%-" + dataLength[i] + "s|", columnName);
+                    System.out.printf("%-" + dataLength[i] + "s|", dataText);
                 }
             }
             System.out.printf("%n" + titleBanner + "%n");
@@ -110,14 +103,8 @@ public class Functions extends SideFunctions {
     }
 
     public static void generateTableTitle(String tableTitle, int totalDataLength, String titleBanner) {
-        int bannerLength = tableTitle.length();
-        String titlePadding = "";
-        int range = ((totalDataLength - 1) - bannerLength) / 2;
-        for (int i = 0; i < range; i++) {
-            titlePadding += " ";
-        }
         System.out.printf(titleBanner + "%n");
-        System.out.printf("|" + titlePadding + tableTitle + " " + titlePadding + "|%n");
+        System.out.printf("|" + (new StringAlignment(totalDataLength-1, StringAlignment.Alignment.CENTER).format(tableTitle)) + "|\n");
         System.out.printf(titleBanner + "%n");
     }
 
@@ -143,32 +130,5 @@ public class Functions extends SideFunctions {
             }
         }
         return dataLength;
-    }
-
-    public static void main(String[] args) {
-        Object[] columnNames = {
-                "ab",
-                "b",
-                "c"
-        };
-
-        Object[][] rowData = {
-                {
-                        "1",
-                        "2",
-                        "3"
-                },
-                {
-                        "1",
-                        "2",
-                        "3"
-                },
-                {
-                        "1",
-                        "2",
-                        "3"
-                }
-        };
-        generateTable("Judulfewuifwbgrwbgrbb", rowData, columnNames, true, true);
     }
 }

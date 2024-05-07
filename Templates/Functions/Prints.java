@@ -1,4 +1,4 @@
-public class Prints {
+public class Prints{
     static public void println(){
         System.out.println();
     }
