@@ -83,4 +83,32 @@ public class Functions extends SideFunctions {
         generateTableHeader(columnNames, dataLength, gap, dataBanner, centerHeader);
         generateTableData(rowData, dataLength, gap, dataBanner, centerRow);
     }
+
+    public static void main(String[] args) {
+        Object[] columnNames = new Object[] {
+            "A",
+            "B",
+            "C"
+        };
+
+        Object[][] rowData = new Object[][] {
+            {
+                "1742395962048-36401249630743104",
+                "2",
+                "3"
+            },
+            {
+                "1",
+                "2",
+                "3"
+            },
+            {
+                "1",
+                "2",
+                "3"
+            }
+        };
+        String judulTable = "Judulhridkjgwyfveuifvweyufebyufw";
+        generateTable(judulTable, rowData, columnNames, true, true);
+    }
 }
